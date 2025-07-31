@@ -179,19 +179,6 @@
         </div>
       `;
     });
-const appGrid = document.getElementById("appGrid");
-    apps.forEach(app => {
-      const link = app === "snakegame"
-        ? "https://maxapp69.github.io/Snake-game/"
-        : "https://maxapp69.github.io";
-      appGrid.innerHTML += `
-        <div class="app">
-          <div>${app}</div>
-          <button onclick="window.open('${link}', '_blank')">Open</button>
-        </div>
-      `;
-    });
-
     function filterApps() {
       const val = document.getElementById("search").value.toLowerCase();
       const appBoxes = document.querySelectorAll(".app");
