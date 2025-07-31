@@ -156,7 +156,7 @@
 
   <script>
     const apps = [
-      "Calculator", "Chatfire", "Netcall", "Convertlink", "Fireai", "MaxAi", "Game",
+      "Calculator", "Chatfire", "Netcall", "Convertlink", "Snakegame", "MaxAi", "hard Game",
       "Convert Text", "Convert Text to Image", "Translate 125+ Languages",
       "Translate 7000+ Languages", "50GB Storage", "70GB Storage", "Camera",
       "Convert Video, Photo 4K", "Convert Video, Photo 8K", "Create Photo",
@@ -171,6 +171,18 @@
     apps.forEach(app => {
       const link = app === "Calculator"
         ? "https://maxapp69.github.io/Calculator/"
+        : "https://maxapp69.github.io";
+      appGrid.innerHTML += `
+        <div class="app">
+          <div>${app}</div>
+          <button onclick="window.open('${link}', '_blank')">Open</button>
+        </div>
+      `;
+    });
+const appGrid = document.getElementById("appGrid");
+    apps.forEach(app => {
+      const link = app === "snakegame"
+        ? "https://maxapp69.github.io/Snake-game/"
         : "https://maxapp69.github.io";
       appGrid.innerHTML += `
         <div class="app">
