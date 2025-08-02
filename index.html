@@ -4,113 +4,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MaxApp Store - Share Videos, Photos, Files</title>
-
-  <!-- ✅ START: SEO Meta Tags -->
-  <meta name="description" content="MaxApp Store is a free online platform to upload, share, and use tools like Calculator, Chatfire, Convertlink, Firetube, MaxAI, and more.">
-  <meta name="keywords" content="MaxApp Store, video sharing, file upload, photo share, Calculator, Chatfire, Netcall, Convertlink, Firetube, MaxAI, Text to Image, AI Translate, PDF Tools, QR Generator, Resume Maker, Storage App, App Store, Free App, Free Tools, Voice Recorder, Video Compressor, Background Remover, Image Resizer, YouTube Tools, App Locker, File Hider, Premium Storage, Max App">
-  <meta name="robots" content="index, follow">
-  <meta name="author" content="Pawan">
-  <link rel="canonical" href="https://maxapp69.github.io/MaxApp-Store/">
-
-  <!-- ✅ Social Sharing (Open Graph) -->
-  <meta property="og:title" content="MaxApp Store - Free Online Tools & Media Sharing">
-  <meta property="og:description" content="Use MaxApp Store to share videos, photos, files, and access free tools like Calculator, Firetube, MaxAI, and more.">
-  <meta property="og:url" content="https://maxapp69.github.io/MaxApp-Store/">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://maxapp69.github.io/MaxApp-Store/cover.png"> <!-- optional thumbnail -->
-
-  <!-- ✅ Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="MaxApp Store - Free Tools & Media Sharing">
-  <meta name="twitter:description" content="Access 30+ free apps like Calculator, Chatfire, File Locker, and share videos/photos with MaxApp Store.">
-  <meta name="twitter:image" content="https://maxapp69.github.io/MaxApp-Store/cover.png"> <!-- optional image -->
-  <!-- ✅ END: SEO Meta Tags -->
-
+  <title>MaxApp Store - Line List View</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: white;
-      color: #333;
-      transition: background 0.3s, color 0.3s;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #007BFF;
-      color: white;
-      padding: 10px 20px;
-    }
-    header .left, header .right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .theme-toggle {
-      cursor: pointer;
-    }
-    .search-bar {
-      padding: 10px 20px;
-    }
-    .search-bar input {
-      width: 100%;
-      padding: 8px;
-      font-size: 16px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      padding: 20px;
-    }
-    .app {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      text-align: center;
-    }
-    .app button {
-      margin-top: 10px;
-      padding: 5px 10px;
-      background: #28a745;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .ads {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      padding: 20px;
-      gap: 20px;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #f1f1f1;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: white; color: #333; }
+    header { display: flex; justify-content: space-between; align-items: center; background: #007BFF; color: white; padding: 10px 20px; }
+    header .left, header .right { display: flex; align-items: center; gap: 10px; }
+    .theme-toggle { cursor: pointer; }
+    .search-bar { padding: 10px 20px; }
+    .search-bar input { width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; }
+    .list { padding: 20px; }
+    .app-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+    .app-item button { padding: 5px 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .ads { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 20px; gap: 20px; }
+    footer { text-align: center; padding: 20px; background: #f1f1f1; }
   </style>
 </head>
 <body>
   <header>
-    <div class="left">
-      <div class="menu">☰</div>
-      <div class="web-name">MaxApp Store</div>
-    </div>
-    <div class="right">
-      <div class="theme-toggle">☢️</div>
-    </div>
+    <div class="left"><div class="menu">☰</div><div class="web-name">MaxApp Store</div></div>
+    <div class="right"><div class="theme-toggle">☢️</div></div>
   </header>
-
-  <div class="search-bar">
-    <input type="text" id="search" placeholder="Search apps..." onkeyup="filterApps()">
-  </div>
-
-  <div class="grid" id="appGrid"></div>
+  <div class="search-bar"><input type="text" id="search" placeholder="Search apps..." onkeyup="filterApps()"></div>
+  <div class="list" id="appList"></div>
 
   <div class="ads">
     <div>
@@ -125,34 +40,13 @@
       </script>
       <script type="text/javascript" src="//www.highperformanceformat.com/af9f1d0e36ef028f1a1b5b60c57ecc71/invoke.js"></script>
     </div>
-
-    <div>
-      <script async="async" data-cfasync="false" src="//pl27200074.profitableratecpm.com/8fd02bc09c63f56e1fc6a87c7b1c8f29/invoke.js"></script>
-      <div id="container-8fd02bc09c63f56e1fc6a87c7b1c8f29"></div>
-    </div>
-
-    <div>
-      <script type="text/javascript">
-       atOptions = {
-         'key' : 'af9f1d0e36ef028f1a1b5b60c57ecc71',
-         'format' : 'iframe',
-         'height' : 250,
-         'width' : 300,
-         'params' : {}
-       };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/af9f1d0e36ef028f1a1b5b60c57ecc71/invoke.js"></script>
-    </div>
-
     <div>
       <script async="async" data-cfasync="false" src="//pl27200074.profitableratecpm.com/8fd02bc09c63f56e1fc6a87c7b1c8f29/invoke.js"></script>
       <div id="container-8fd02bc09c63f56e1fc6a87c7b1c8f29"></div>
     </div>
   </div>
 
-  <footer>
-    Pawan | smarttotalgame@gmail.com
-  </footer>
+  <footer>Pawan | smarttotalgame@gmail.com</footer>
 
   <script>
     const apps = [
@@ -167,24 +61,30 @@
       "QR code Generator", "Coming", "Coming"
     ];
 
-    const appGrid = document.getElementById("appGrid");
-    apps.forEach(app => {
-      const link = app === "Calculator"
-        ? "https://maxapp69.github.io/Calculator/"
-        : "https://maxapp69.github.io";
-      appGrid.innerHTML += `
-        <div class="app">
-          <div>${app}</div>
+    const appLinks = {
+      "Calculator": "https://maxapp69.github.io/Calculator/",
+      "Convertlink": "https://maxapp69.github.io/Convert-link/",
+      "Snakegame": "https://maxapp69.github.io/Snake-game/",
+      "hard Game": "https://maxapp69.github.io/Hard-O-and-game/"
+    };
+
+    const appList = document.getElementById("appList");
+    apps.forEach((app, index) => {
+      const link = appLinks[app] || `https://${app.toLowerCase().replace(/\s+/g, '')}.github.io`;
+      appList.innerHTML += `
+        <div class="app-item">
+          <div>${index + 1}. ${app}</div>
           <button onclick="window.open('${link}', '_blank')">Open</button>
         </div>
       `;
     });
+
     function filterApps() {
       const val = document.getElementById("search").value.toLowerCase();
-      const appBoxes = document.querySelectorAll(".app");
-      appBoxes.forEach(box => {
-        const name = box.children[0].innerText.toLowerCase();
-        box.style.display = name.includes(val) ? "" : "none";
+      const appItems = document.querySelectorAll(".app-item");
+      appItems.forEach(item => {
+        const name = item.children[0].innerText.toLowerCase();
+        item.style.display = name.includes(val) ? "" : "none";
       });
     }
 
