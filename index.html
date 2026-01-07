@@ -1,98 +1,195 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MaxApp Store - Line List View</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: white; color: #333; }
-    header { display: flex; justify-content: space-between; align-items: center; background: #007BFF; color: white; padding: 10px 20px; }
-    header .left, header .right { display: flex; align-items: center; gap: 10px; }
-    .theme-toggle { cursor: pointer; }
-    .search-bar { padding: 10px 20px; }
-    .search-bar input { width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; }
-    .list { padding: 20px; }
-    .app-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
-    .app-item button { padding: 5px 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    .ads { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 20px; gap: 20px; }
-    footer { text-align: center; padding: 20px; background: #f1f1f1; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Toki Portal - Master</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --poki-purple: #6c5ce7; --poki-teal: #20f3d3; --white: #ffffff; }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--poki-teal); margin: 0; padding: 10px; overflow-x: hidden; }
+
+        header { max-width: 1000px; margin: 0 auto 15px; background: var(--white); padding: 12px 20px; border-radius: 20px; box-shadow: 0 6px 0 rgba(0,0,0,0.05); position: relative; }
+        .logo { font-family: 'Jost', sans-serif; font-size: 30px; font-weight: 700; color: var(--poki-purple); cursor: pointer; }
+        .stealth-btn { position: absolute; right: 20px; top: 15px; width: 60px; height: 40px; cursor: pointer; opacity: 0; }
+
+        .search-bar { width: 100%; margin: 10px 0; padding: 12px; border-radius: 15px; border: 2px solid #f1f1f1; outline: none; }
+        .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 5px; }
+        .tab-btn { padding: 10px 20px; border-radius: 12px; border: none; background: #eee; font-weight: 600; cursor: pointer; }
+        .tab-btn.active { background: var(--poki-purple); color: white; box-shadow: 0 4px 0 #5444c4; }
+
+        /* Poki Grid */
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); grid-auto-rows: 110px; gap: 12px; max-width: 1000px; margin: 20px auto; }
+        .game-card { background: white; border-radius: 22px; overflow: hidden; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
+        .game-card.big { grid-column: span 2; grid-row: span 2; }
+        .game-card img { width: 100%; height: 100%; object-fit: cover; }
+        .game-card p { position: absolute; bottom: 0; width: 100%; background: rgba(255,255,255,0.9); margin: 0; padding: 4px; font-size: 10px; font-weight: 700; text-align: center; }
+        .pencil { position: absolute; top: 6px; right: 6px; background: white; border-radius: 50%; width: 24px; height: 24px; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 5; }
+
+        /* Keyboard Modal */
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #d1d5db; padding: 15px; border-radius: 20px; z-index: 1000; width: 95%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; backdrop-filter: blur(4px); }
+        
+        .pass-view { background: white; width: 100%; padding: 15px; border-radius: 10px; text-align: center; font-size: 24px; margin-bottom: 10px; letter-spacing: 3px; border: none; pointer-events: none; }
+        .kb-layout { display: grid; gap: 6px; }
+        .key { background: white; padding: 12px 5px; border-radius: 6px; text-align: center; font-weight: 600; cursor: pointer; font-size: 18px; box-shadow: 0 2px 0 #9ca3af; }
+        .key:active { transform: translateY(2px); box-shadow: none; background: #eee; }
+        .key.action { background: #9ca3af; color: white; font-size: 13px; }
+        .key.ok { background: var(--poki-purple); color: white; }
+
+        input, select, button { width: 100%; margin: 8px 0; padding: 12px; border-radius: 12px; border: 2px solid #eee; font-size: 14px; }
+        .btn-pub { background: var(--poki-purple); color: white; border: none; font-weight: 700; cursor: pointer; }
+        .mgr-item { background: #f9f9f9; padding: 12px; margin-bottom: 8px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="left"><div class="menu">☰</div><div class="web-name">MaxApp Store</div></div>
-    <div class="right"><div class="theme-toggle">☢️</div></div>
-  </header>
-  <div class="search-bar"><input type="text" id="search" placeholder="Search apps..." onkeyup="filterApps()"></div>
-  <div class="list" id="appList"></div>
 
-  <div class="ads">
-    <div>
-      <script type="text/javascript">
-       atOptions = {
-         'key' : 'af9f1d0e36ef028f1a1b5b60c57ecc71',
-         'format' : 'iframe',
-         'height' : 250,
-         'width' : 300,
-         'params' : {}
-       };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/af9f1d0e36ef028f1a1b5b60c57ecc71/invoke.js"></script>
+<header>
+    <div class="logo" onclick="location.reload()">TOKI GAMES</div>
+    <div class="stealth-btn" onclick="openKeypad()"></div>
+    <input type="text" id="search" placeholder="Search games/apps..." oninput="render()" class="search-bar">
+    <div class="tabs">
+        <button class="tab-btn active" id="btn-game" onclick="setFilter('game')">Games</button>
+        <button class="tab-btn" id="btn-app" onclick="setFilter('app')">Apps</button>
     </div>
-    <div>
-      <script async="async" data-cfasync="false" src="//pl27200074.profitableratecpm.com/8fd02bc09c63f56e1fc6a87c7b1c8f29/invoke.js"></script>
-      <div id="container-8fd02bc09c63f56e1fc6a87c7b1c8f29"></div>
-    </div>
-  </div>
+</header>
 
-  <footer>Pawan | smarttotalgame@gmail.com</footer>
+<div class="game-grid" id="grid"></div>
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
 
-  <script>
-    const apps = [
-      "Calculator", "Chatfire", "Netcall", "Convertlink", "Snakegame", "MaxAi", "hard Game",
-      "Convert Text", "Convert Text to Image", "Translate 125+ Languages",
-      "Translate 7000+ Languages", "50GB Storage", "70GB Storage", "Camera",
-      "Convert Video, Photo 4K", "Convert Video, Photo 8K", "Create Photo",
-      "Auto Text in Video", "Text to Voice", "Camera Effect", "APK Game Search",
-      "LinkOpen (All Link Opener)", "Premium Storage 500GB", "PDF Merger + Splitter",
-      "Voice Recorder Online", "Video Compressor", "Resume Builder",
-      "YouTube Thumbnail Maker", "Background Remover", "Image Resizer",
-      "QR code Generator", "Coming", "Coming"
-    ];
+<div class="modal" id="authModal">
+    <input type="password" id="passInput" class="pass-view" readonly placeholder="Enter PIN">
+    <div id="kb-engine" class="kb-layout"></div>
+</div>
 
-    const appLinks = {
-      "Calculator": "https://maxapp69.github.io/Calculator/",
-      "Convertlink": "https://maxapp69.github.io/Convert-link/",
-      "Snakegame": "https://maxapp69.github.io/Snake-game/",
-      "hard Game": "https://maxapp69.github.io/Hard-O-and-game/"
+<div class="modal" id="devPanel" style="background:white;">
+    <h3 style="margin-top:0">Upload Content</h3>
+    <select id="gCat"><option value="game">Game</option><option value="app">App</option></select>
+    <input type="text" id="gName" placeholder="Name">
+    <input type="text" id="gImg" placeholder="Image Direct Link">
+    <input type="text" id="gLink" placeholder="Game/App Link">
+    <input type="text" id="gDev" placeholder="Developer Name">
+    <input type="email" id="gMail" placeholder="Gmail">
+    <button class="btn-pub" onclick="publish()">Publish Live 🚀</button>
+</div>
+
+<div class="modal" id="mgrPanel" style="background:white; max-height:80vh; overflow-y:auto;">
+    <h3 style="margin-top:0">Manager Dashboard</h3>
+    <div id="mgrList"></div>
+    <button onclick="closeAll()" style="background:#eee; border:none; margin-top:10px;">Close</button>
+</div>
+
+<script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHDTirt2yfACj5JvYTPe3VzEGUz7yEMWs",
+      authDomain: "toki-8d1b9.firebaseapp.com",
+      databaseURL: "https://toki-8d1b9-default-rtdb.firebaseio.com",
+      projectId: "toki-8d1b9",
+      storageBucket: "toki-8d1b9.firebasestorage.app",
+      messagingSenderId: "402902507678",
+      appId: "1:402902507678:web:f8a7ca2977200bce309b8f"
     };
 
-    const appList = document.getElementById("appList");
-    apps.forEach((app, index) => {
-      const link = appLinks[app] || `https://${app.toLowerCase().replace(/\s+/g, '')}.github.io`;
-      appList.innerHTML += `
-        <div class="app-item">
-          <div>${index + 1}. ${app}</div>
-          <button onclick="window.open('${link}', '_blank')">Open</button>
-        </div>
-      `;
-    });
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    let kbType = "123";
+    let filterType = "game";
 
-    function filterApps() {
-      const val = document.getElementById("search").value.toLowerCase();
-      const appItems = document.querySelectorAll(".app-item");
-      appItems.forEach(item => {
-        const name = item.children[0].innerText.toLowerCase();
-        item.style.display = name.includes(val) ? "" : "none";
-      });
+    function drawKB() {
+        const engine = document.getElementById('kb-engine');
+        engine.innerHTML = "";
+        if(kbType === "123") {
+            engine.style.gridTemplateColumns = "repeat(3, 1fr)";
+            "123456789".split("").forEach(n => engine.innerHTML += `<div class="key" onclick="press('${n}')">${n}</div>`);
+            engine.innerHTML += `<div class="key action" onclick="setKB('ABC')">ABC</div>`;
+            engine.innerHTML += `<div class="key" onclick="press('0')">0</div>`;
+            engine.innerHTML += `<div class="key action" onclick="press('CLR')">⌫</div>`;
+            engine.innerHTML += `<div class="key ok" style="grid-column: span 3" onclick="validate()">ENTER</div>`;
+        } else {
+            engine.style.gridTemplateColumns = "repeat(10, 1fr)";
+            "QWERTYUIOPASDFGHJKLZXCVBNM".split("").forEach(l => engine.innerHTML += `<div class="key" style="grid-column: span 1; font-size:12px;" onclick="press('${l}')">${l}</div>`);
+            engine.innerHTML += `<div class="key action" style="grid-column: span 3" onclick="setKB('123')">?123</div>`;
+            engine.innerHTML += `<div class="key action" style="grid-column: span 3" onclick="press('CLR')">⌫</div>`;
+            engine.innerHTML += `<div class="key ok" style="grid-column: span 4" onclick="validate()">OK</div>`;
+        }
     }
 
-    document.querySelector(".theme-toggle").onclick = () => {
-      document.body.classList.toggle("dark");
-      document.body.style.background = document.body.classList.contains("dark") ? "#121212" : "white";
-      document.body.style.color = document.body.classList.contains("dark") ? "white" : "#333";
-    };
-  </script>
+    function setKB(t) { kbType = t; drawKB(); }
+    function press(v) { 
+        let inp = document.getElementById('passInput');
+        if(v==='CLR') inp.value = inp.value.slice(0,-1); else inp.value += v;
+    }
+
+    function validate() {
+        const p = document.getElementById('passInput').value;
+        if(p === "1234567890123") { closeAll(); openBox('devPanel'); }
+        else if(p === "PAWAN8799123") { closeAll(); openMgr(); }
+        else { alert("Wrong Password!"); document.getElementById('passInput').value = ""; }
+    }
+
+    function publish() {
+        const data = {
+            name: document.getElementById('gName').value,
+            img: document.getElementById('gImg').value,
+            link: document.getElementById('gLink').value,
+            cat: document.getElementById('gCat').value,
+            dev: document.getElementById('gDev').value,
+            mail: document.getElementById('gMail').value,
+            date: new Date().toLocaleDateString('en-GB'),
+            ts: firebase.database.ServerValue.TIMESTAMP
+        };
+        if(!data.name || !data.img || !data.link) return alert("Fill all details!");
+        db.ref('toki_final_pro').push(data).then(() => location.reload());
+    }
+
+    function render() {
+        const search = document.getElementById('search').value.toLowerCase();
+        db.ref('toki_final_pro').orderByChild('ts').on('value', snap => {
+            const grid = document.getElementById('grid'); grid.innerHTML = "";
+            let arr = []; snap.forEach(c => {
+                let v = c.val(); v.id = c.key;
+                if(v.cat === filterType && (!search || v.name.toLowerCase().includes(search))) arr.unshift(v);
+            });
+            arr.forEach((g, i) => {
+                grid.innerHTML += `<div class="game-card ${i===0?'big':''}">
+                    <div class="pencil" onclick="alert('Developer: ${g.dev}\\nEmail: ${g.mail}\\nReleased: ${g.date}'); event.stopPropagation();">✎</div>
+                    <img src="${g.img}" onclick="window.open('${g.link}','_blank')">
+                    <p>${g.name}</p>
+                </div>`;
+            });
+        });
+    }
+
+    function openMgr() {
+        openBox('mgrPanel');
+        db.ref('toki_final_pro').on('value', snap => {
+            const list = document.getElementById('mgrList'); list.innerHTML = "";
+            snap.forEach(c => {
+                list.innerHTML += `<div class="mgr-item">
+                    <span>${c.val().name}</span>
+                    <button onclick="if(confirm('Delete?')) db.ref('toki_final_pro').child('${c.key}').remove()" style="background:#ff4757; color:white; border:none; padding:5px 10px; border-radius:8px;">DEL</button>
+                </div>`;
+            });
+        });
+    }
+
+    function setFilter(t) { 
+        filterType = t; 
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-'+t).classList.add('active');
+        render(); 
+    }
+
+    function openKeypad() { kbType = "123"; drawKB(); openBox('authModal'); }
+    function openBox(id) { document.getElementById('overlay').style.display='block'; document.getElementById(id).style.display='block'; }
+    function closeAll() { 
+        document.querySelectorAll('.modal, .overlay').forEach(e => e.style.display='none'); 
+        document.getElementById('passInput').value = "";
+    }
+    render();
+</script>
 </body>
 </html>
